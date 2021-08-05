@@ -1,0 +1,19 @@
+{
+  "name": "ozitag-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "style": "sass --watch assets/sass/style.scss pages/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/I-vasilich-I/ozitag-test.git"
+  },
+  "author": "Oleg Vaskevich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/I-vasilich-I/ozitag-test/issues"
+  },
+  "homepage": "https://github.com/I-vasilich-I/ozitag-test#readme"
+}
