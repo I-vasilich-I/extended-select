@@ -149,9 +149,15 @@
   /* Brand/DeepBlue */
   border: 1px solid #035B77;
   border-radius: 4px;
+  img {
+    display: none;
+  }
 
   &--checked {
     background: #035B77;
+    img {
+      display: unset;
+    }
   }
 
   &:hover {
@@ -170,6 +176,10 @@
 
   background: #035B77;
   border-radius: 4px;
+
+  &--hidden {
+    display: none;
+  }
 }
 
 .select-item__text {

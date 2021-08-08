@@ -9,150 +9,45 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="wrapper">
-    <div class="custom-select">
-      <select name="tnved" id="tnved" multiple class="hidden">
-        <option value="10">
-          [A] - Продукция сельского хозяйства
-        </option>
-        <option value="11">
-          [О] - Услуги в области государственного управления
-        </option>
-        <option value="12" data-level="2">
-          [84] - Услуги в области государственного управления и обороны, 
-          предоставляемые обществу в целом; услуги по обязательному социальному 
-          страхованию
-        </option>
-        <option value="13" data-level="3">
-          [84.1] - Услуги в области государственного управления 
-          общего характера и социально-экономической сфере
-        </option>
-        <option value="14" data-level="4">
-          [84.11] - Услуги в области государственного управления общего характера
-        </option>
-        <option value="15" data-level="5">
-          [84.11.11] - Услуги в области исполнительной и законодательной деятельности
-        </option>
-        <option value="16" data-level="6">
-          [84.11.11.100] - Услуги центральных органов исполнительной 
-          и законодательной власти
-        </option>
-        <option value="17" data-level="6">
-          [84.11.11.200] - Услуги органов управления и самоуправления 
-          областного территориального уровня
-        </option>
-        <option value="18" data-level="6">
-          [84.11.11.300] - Услуги органов управления и самоуправления 
-          базового территориального уровня
-        </option>
-        <option value="19" data-level="5">
-          [84.11.11] - Услуги в области исполнительной и законодательной 
-          деятельности
-        </option>
-        
-      </select>
-      <div class="search-container">
-        <div class="search__navigation">
-          <img src="../assets/images/ic_backArrow.svg" alt="back">
-          <p>Реализуемые товары</p>
-        </div>
-        <input class="search__input" type="search" placeholder="search">
-      </div>
-
-      <div class="select-items__container">
-        <div class="select-items">
-          <div class="select-item__container" data-level="2">
-            <div class="select-item__checkbox">
-              <div class="checkbox-dot"></div>
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              <img class="arrow" src="../assets/images/Vector.svg" />
-              [84] - Услуги в области государственного управления и обороны, 
-              предоставляемые обществу в целом; услуги по обязательному социальному 
-              страхованию
-            </p>
-          </div>
-          <div class="select-item__container" data-level="3">
-            <div class="select-item__checkbox">
-              <div class="checkbox-dot"></div>
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              <img class="arrow" src="../assets/images/Vector.svg" />
-              [84.1] - Услуги в области государственного управления 
-              общего характера и социально-экономической сфере
-            </p>
-          </div>
-          <div class="select-item__container" data-level="4">
-            <div class="select-item__checkbox">
-              <div class="checkbox-dot"></div>
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              <img class="arrow" src="../assets/images/Vector.svg" />
-              [84.11] - Услуги в области государственного управления общего характера
-            </p>
-          </div>
-          <div class="select-item__container select-item__container--checked" data-level="5">
-            <div class="select-item__checkbox select-item__checkbox--checked">
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              <img class="arrow" src="../assets/images/Vector.svg" />
-              [84.11.11] - Услуги в области исполнительной и законодательной деятельности
-            </p>
-          </div>
-          <div class="select-item__container select-item__container--checked" data-level="6">
-            <div class="select-item__checkbox select-item__checkbox--checked">
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              [84.11.11.100] - Услуги центральных органов исполнительной 
-              и законодательной власти
-            </p>
-          </div>
-          <div class="select-item__container select-item__container--checked" data-level="6">
-            <div class="select-item__checkbox select-item__checkbox--checked">
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              [84.11.11.200] - Услуги органов управления и самоуправления 
-              областного территориального уровня
-            </p>
-          </div>
-          <div class="select-item__container select-item__container--checked" data-level="6">
-            <div class="select-item__checkbox select-item__checkbox--checked">
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              [84.11.11.300] - Услуги органов управления и самоуправления 
-              базового территориального уровня
-            </p>
-          </div>
-          <div class="select-item__container" data-level="5">
-            <div class="select-item__checkbox">
-              <img src="../assets/images/check.svg" alt="check">
-            </div>
-            <p class="select-item__text">
-              <img class="arrow arrow--closed" src="../assets/images/Vector.svg" />
-              [84.11.11] - Услуги в области исполнительной и законодательной 
-              деятельности
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="custom-select__footer">
-        <button class="footer__button footer__button--primarily">Применить</button>
-        <button class="footer__button footer__button--secondary">Очистить</button>
-      </div>
-
-    </div>
-  </div>
-
-  
-
-
+  <select name="tnved" id="tnved" multiple class="hidden">
+    <!-- <option value="10">
+      [A] - Продукция сельского хозяйства
+    </option>
+    <option value="11">
+      [О] - Услуги в области государственного управления
+    </option> -->
+    <option value="12" data-level="2">
+      [84] - Услуги в области государственного управления и обороны, 
+      предоставляемые обществу в целом; услуги по обязательному социальному 
+      страхованию
+    </option>
+    <option value="13" data-level="3">
+      [84.1] - Услуги в области государственного управления 
+      общего характера и социально-экономической сфере
+    </option>
+    <option value="14" data-level="4">
+      [84.11] - Услуги в области государственного управления общего характера
+    </option>
+    <option value="15" data-level="5">
+      [84.11.11] - Услуги в области исполнительной и законодательной деятельности
+    </option>
+    <option value="16" data-level="6">
+      [84.11.11.100] - Услуги центральных органов исполнительной 
+      и законодательной власти
+    </option>
+    <option value="17" data-level="6">
+      [84.11.11.200] - Услуги органов управления и самоуправления 
+      областного территориального уровня
+    </option>
+    <option value="18" data-level="6">
+      [84.11.11.300] - Услуги органов управления и самоуправления 
+      базового территориального уровня
+    </option>
+    <option value="19" data-level="5">
+      [84.11.11] - Услуги в области исполнительной и законодательной 
+      деятельности
+    </option>
+    
+  </select>
 </body>
 </html>

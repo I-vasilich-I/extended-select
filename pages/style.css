@@ -133,8 +133,14 @@
   border: 1px solid #035B77;
   border-radius: 4px;
 }
+.select-item__checkbox img {
+  display: none;
+}
 .select-item__checkbox--checked {
   background: #035B77;
+}
+.select-item__checkbox--checked img {
+  display: unset;
 }
 .select-item__checkbox:hover {
   cursor: pointer;
@@ -148,6 +154,9 @@
   /* Brand/DeepBlue */
   background: #035B77;
   border-radius: 4px;
+}
+.checkbox-dot--hidden {
+  display: none;
 }
 
 .select-item__text {
