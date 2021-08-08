@@ -132,6 +132,10 @@
     background: linear-gradient(0deg, rgba(3, 91, 119, 0.05), rgba(3, 91, 119, 0.05)), #FFFFFF;
   }
 
+  &--hidden {
+    display: none;
+  }
+
 }
 
 .select-item__checkbox {
@@ -194,14 +198,15 @@
   padding: 5px 3px 4px 3px;
   left: -15px;
   top: 4px;
-
+  transition: .3s ease-in-out;
+  
   &:hover {
     cursor: pointer;
   }
 
   &--closed {
     transform: rotate(180deg);
-    transition: .5s ease-in-out;
+    
   }
   
 }

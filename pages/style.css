@@ -116,6 +116,9 @@
 .select-item__container--checked {
   background: linear-gradient(0deg, rgba(3, 91, 119, 0.05), rgba(3, 91, 119, 0.05)), #FFFFFF;
 }
+.select-item__container--hidden {
+  display: none;
+}
 
 .select-item__checkbox {
   display: flex;
@@ -170,13 +173,13 @@
   padding: 5px 3px 4px 3px;
   left: -15px;
   top: 4px;
+  transition: 0.3s ease-in-out;
 }
 .arrow:hover {
   cursor: pointer;
 }
 .arrow--closed {
   transform: rotate(180deg);
-  transition: 0.5s ease-in-out;
 }
 
 .custom-select__footer {

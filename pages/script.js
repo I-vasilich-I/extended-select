@@ -12,8 +12,10 @@ const getDataLevel = (option) => {
   return dataAtr.value;
 }
 
+
+
 const getSelectOptionsData = (selectOptions) => {
-  const OptionsArrayData = [];
+  const optionsArrayData = [];
   selectOptions.map((elem, id, arr) => {
     const level = getDataLevel(elem);
     const prevLevel = getDataLevel(arr[id - 1]);
@@ -23,36 +25,38 @@ const getSelectOptionsData = (selectOptions) => {
       value: elem.value,
       parent: null,
       children: [],
-      checked: false,
+      checked: elem.selected,
+      isExpanded: true,
+      isPartial: false,
     }
 
     if (!level) {
-      OptionsArrayData.push(obj);
+      optionsArrayData.push(obj);
       return;
     } 
 
     if (level > prevLevel) {
-      obj.parent = OptionsArrayData[id - 1];
-      OptionsArrayData[id - 1]?.children.push(obj);
+      obj.parent = optionsArrayData[id - 1];
+      optionsArrayData[id - 1]?.children.push(obj);
     }
 
     if (level === prevLevel) {
-      obj.parent = OptionsArrayData[id - 1].parent
-      OptionsArrayData[id - 1].parent.children.push(obj);
+      obj.parent = optionsArrayData[id - 1].parent
+      optionsArrayData[id - 1].parent.children.push(obj);
     }
 
     if (level < prevLevel) {
-      obj.parent = OptionsArrayData[id - 1].parent.parent;
-      OptionsArrayData[id - 1].parent.parent.children.push(obj);
+      obj.parent = optionsArrayData[id - 1].parent.parent;
+      optionsArrayData[id - 1].parent.parent.children.push(obj);
     }
 
-    OptionsArrayData.push(obj);
+    optionsArrayData.push(obj);
   });
 
-  return OptionsArrayData;
+  return optionsArrayData;
 }
 
-const generateCustomSelect = (OptionsArrayData) => {
+const generateCustomSelect = (optionsArrayData) => {
   const body = document.body;
   const wrapperDiv = create('div', 'wrapper', null, body);
   const customSelectDiv = create('div', 'custom-select', null, wrapperDiv);
@@ -65,15 +69,31 @@ const generateCustomSelect = (OptionsArrayData) => {
 
   const selectItemsContainerDiv = create('div', 'select-items__container', null, customSelectDiv);
 
-  const selectItemsArray = OptionsArrayData.map((elem) => {
-    const selectItemContainerDiv = create('div', 'select-item__container', null, null, ['value', elem.value]);
+  const selectItemsArray = optionsArrayData.map((elem) => {
+    
+    const selectItemContainerDiv = create(
+      'div', 
+      elem.checked 
+      ? 'select-item__container select-item__container--checked' 
+      : 'select-item__container', 
+      null, 
+      null, 
+      ['value', elem.value]
+    );
     if (elem.level) selectItemContainerDiv.dataset['level'] = elem.level;
-    const selectItemCheckboxDiv = create('div', 'select-item__checkbox', null, selectItemContainerDiv);
+    const selectItemCheckboxDiv = create(
+      'div', 
+      elem.checked 
+      ? 'select-item__checkbox select-item__checkbox--checked' 
+      : 'select-item__checkbox', 
+      null, 
+      selectItemContainerDiv
+    );
     create('div', 'checkbox-dot checkbox-dot--hidden', null, selectItemCheckboxDiv);
     create('img', null, null, selectItemCheckboxDiv, ['src', '../assets/images/check.svg'], ['alt', 'check']);
     const selectItemTextP = create('p', 'select-item__text', null, selectItemContainerDiv);
     selectItemTextP.innerHTML = elem.option.innerHTML;
-    create('img', 'arrow', null, selectItemTextP, ['src', '../assets/images/Vector.svg'], ['alt', 'arrow']);
+    if (elem.children.length) create('img', 'arrow', null, selectItemTextP, ['src', '../assets/images/Vector.svg'], ['alt', 'arrow']);
     elem.itemContainer = selectItemContainerDiv;
     return selectItemContainerDiv;
   });
@@ -87,53 +107,121 @@ const generateCustomSelect = (OptionsArrayData) => {
   return { selectItemsDiv }
 }
 
-const customSelectItemHandler = (selectItemsDiv, OptionsArrayData) => {
-  selectItemsDiv.addEventListener('click', (e) => {
-    const checkbox = e.target.closest('.select-item__checkbox');
+const toggleCheckboxAllChildren = (option, isChecked) => {
+  if (!option.children.length) return;
+  
+  option.children.map(elem => {
+    if (isChecked) {
+      elem.itemContainer?.classList.remove('select-item__container--checked');
+      elem.itemContainer?.children[0]?.classList.remove('select-item__checkbox--checked');
+      elem.checked = false;
+    } else {
+      const dotDiv = elem.parent.itemContainer.children[0].children[0];
+      dotDiv.classList.add('checkbox-dot--hidden');
+      elem.itemContainer?.classList.add('select-item__container--checked');
+      elem.itemContainer?.children[0]?.classList.add('select-item__checkbox--checked');
+      elem.checked = true
+    } 
+    toggleCheckboxAllChildren(elem, isChecked);
+    return elem;
+  });
+}
+
+const toggleCheckAllParents = (option) => {
+  if (!option.parent) return;
+  const checkCount = option.parent.children.reduce((acc, b) => acc + b.checked, 0);
+  const childrenCount = option.parent.children.length;
+  const dotDiv = option.parent.itemContainer.children[0].children[0];
+  if (checkCount === childrenCount) {
+    dotDiv.classList.add('checkbox-dot--hidden');
+    option.parent.checked = !option.parent.checked;
+    option.parent.itemContainer.classList.toggle('select-item__container--checked');
+    option.parent.itemContainer.children[0]?.classList.toggle('select-item__checkbox--checked');
+  } else if (option.parent.checked) {
+    dotDiv.classList.add('checkbox-dot--hidden');
+    option.parent.checked = !option.parent.checked;
+    option.parent.itemContainer.classList.toggle('select-item__container--checked');
+    option.parent.itemContainer.children[0]?.classList.toggle('select-item__checkbox--checked');
+  } else dotDiv.classList.remove('checkbox-dot--hidden');
+  toggleCheckAllParents(option.parent);
+}
+
+const togglePartialCheckAllParents = (option, isPartial) => {
+  if (!option.parent) return;
+  const dotDiv = option.parent.itemContainer.children[0].children[0];
+  const checkCount = option.parent.children.reduce((acc, b) => acc + b.checked, 0);
+  const childrenCount = option.parent.children.length;
+  if (isPartial && checkCount < childrenCount) dotDiv.classList.remove('checkbox-dot--hidden');
+  else dotDiv.classList.add('checkbox-dot--hidden');
+  togglePartialCheckAllParents(option.parent, isPartial);
+}
+
+const checkboxHandler = (e, optionsArrayData) => {
+  const checkbox = e.target.closest('.select-item__checkbox');
     if (!checkbox) return;
     const itemContainer = checkbox?.closest('.select-item__container');
-    const option = OptionsArrayData.find((elem) => elem.itemContainer === itemContainer);
-    console.log(option);
-    option.children.map(elem => {
-      if (option.checked) {
-        elem.itemContainer?.classList.remove('select-item__container--checked');
-        elem.itemContainer?.children[0]?.classList.remove('select-item__checkbox--checked');
-        elem.checked = false;
-      } else {
-        elem.itemContainer?.classList.add('select-item__container--checked');
-        elem.itemContainer?.children[0]?.classList.add('select-item__checkbox--checked');
-        elem.checked = true
-      } 
-      return elem;
-    });
-
+    const option = optionsArrayData.find((elem) => elem.itemContainer === itemContainer);
+    toggleCheckboxAllChildren(option, option.checked);
     checkbox?.classList.toggle('select-item__checkbox--checked');
     itemContainer?.classList.toggle('select-item__container--checked');
     option.checked = !option.checked;
+    toggleCheckAllParents(option);
+    //togglePartialCheckAllParents(option, option.checked);
+}
 
-    const checkCount = option.parent.children.reduce((acc, b) => acc + b.checked, 0);
-    const childrenCount = option.parent.children.length
-    if (checkCount === childrenCount) {
-      option.parent.checked = !option.parent.checked;
-      option.parent.itemContainer.classList.toggle('select-item__container--checked');
-      option.parent.itemContainer.children[0]?.classList.toggle('select-item__checkbox--checked');
-    } else if (option.parent.checked) {
-      option.parent.checked = !option.parent.checked;
-      option.parent.itemContainer.classList.toggle('select-item__container--checked');
-      option.parent.itemContainer.children[0]?.classList.toggle('select-item__checkbox--checked');
-    }
+const toggleExpandAllChildren = (option, isExpanded) => {
+  if (!option.children.length) return;
+  option.children.map((elem) => {
+    if (isExpanded) {
+      elem.itemContainer?.classList.add('select-item__container--hidden'); 
+      elem.isExpanded = false;
+    } else {
+      elem.itemContainer?.classList.remove('select-item__container--hidden');
+      elem.itemContainer?.children[1]?.children[0]?.classList.remove('arrow--closed');
+      elem.isExpanded = true;
+    } 
+    toggleExpandAllChildren(elem, isExpanded);
+    return elem;
+  });
+}
+
+const expandHandler = (e, optionsArrayData) => {
+  const arrow = e.target.closest('.arrow');
+  if (!arrow) return;
+  const itemContainer = arrow?.closest('.select-item__container');
+  const option = optionsArrayData.find((elem) => elem.itemContainer === itemContainer);
+  if (option.isExpanded) toggleExpandAllChildren(option, true);
+  else toggleExpandAllChildren(option, false);
+  option.isExpanded = !option.isExpanded;
+
+  arrow.classList.toggle('arrow--closed');
+  console.log(option);
+}
+
+const customSelectEventHandler = (selectItemsDiv, optionsArrayData) => {
+  selectItemsDiv.addEventListener('click', (e) => {
+    checkboxHandler(e, optionsArrayData);
+    expandHandler(e, optionsArrayData);
   })
 }
 
+
 const customeSelect = () => {
   const selectElements = [...document.getElementsByTagName('select')];
-  const selectOptions = [...selectElements[0]];
-  const OptionsArrayData = getSelectOptionsData(selectOptions)
-  const { selectItemsDiv } = generateCustomSelect(OptionsArrayData);
+  selectElements.forEach((elem) => {
+    const selectOptions = [...elem];
+    const optionsArrayData = getSelectOptionsData(selectOptions)
+    const { selectItemsDiv } = generateCustomSelect(optionsArrayData);
+    
+    customSelectEventHandler(selectItemsDiv, optionsArrayData);
+  })
+  // const selectOptions = [...selectElements[0]];
+  // const optionsArrayData = getSelectOptionsData(selectOptions)
+  // const { selectItemsDiv } = generateCustomSelect(optionsArrayData);
   
-  customSelectItemHandler(selectItemsDiv, OptionsArrayData);
+  // customSelectEventHandler(selectItemsDiv, optionsArrayData);
   
-  console.log(OptionsArrayData);
+  // console.log(optionsArrayData);
 }
 
 
