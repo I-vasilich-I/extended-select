@@ -1,8 +1,8 @@
 
 const select = document.getElementsByTagName('select');
-select[0].addEventListener('change', (e) => {
+[...select].forEach(elem => elem.addEventListener('change', (e) => {
   console.log(e.target.value);
-})
+}));
 
 const getAttribute = (element, attrName) => {
   if (!element || !attrName) return;
@@ -239,7 +239,7 @@ const unCheckAllOptions = ({ selectItemsDiv, optionsArrayData, selectContainerDi
     return getAttribute(elem, 'value');
   });
   optionsArrayData.filter((elem) => checkedValues.includes(elem.value)).map((el) => {
-    optionsArrayData[0].select.dispatchEvent(new Event('change'));
+    el.select.dispatchEvent(new Event('change'));
     el.checked = false;
     el.option.removeAttribute('selected');
   });
@@ -255,7 +255,7 @@ const clearButtonHandler = (e, args) => {
   unCheckAllOptions(args);
 }
 
-const submitButtonHandler = (e, customSelectDiv, selectItemsDiv, selectContainerDiv) => {
+const submitButtonHandler = (e, customSelectDiv, selectItemsDiv, selectContainerDiv, optionsArrayData) => {
   const submitButton = e.target.closest('.footer__button--primarily');
   if (!submitButton) return;
   const checkedRoot = selectItemsDiv.querySelectorAll('.select-item__container--checked');
@@ -265,6 +265,40 @@ const submitButtonHandler = (e, customSelectDiv, selectItemsDiv, selectContainer
   selectContainerDiv.children[0].children[1].classList.remove('show-selected--hidden');
   selectContainerDiv.children[0].children[1].innerHTML = `Показать выбранное (${checkedRoot.length})`
   customSelectDiv.classList.add('custom-select--hidden');
+  const checkedValues = [...checkedRoot].map(element => getAttribute(element, 'value'));
+  optionsArrayData.filter((elem) => checkedValues.includes(elem.value)).map((el) => {
+    el.select.dispatchEvent(new Event('change'));
+    el.option.setAttribute('selected', true);
+  });
+
+}
+
+const clearInputInnerHtml = (elem) => {
+  let { innerHTML } = elem;
+  innerHTML = innerHTML.replaceAll('<b>','');
+  innerHTML = innerHTML.replaceAll('</b>','');
+  elem.innerHTML = innerHTML;
+  console.log(elem.innerHTML)
+}
+
+const searchInputEventHandler = (customSelectDiv, selectItemsDiv) => {
+  const selectItems = [...selectItemsDiv.children];
+  const searchInput = customSelectDiv.querySelector('.search__input');
+  searchInput.addEventListener('input', (e) => {
+    const searchPhrase = e.target.value;
+    const selectItemsTextArray = selectItems.map((el) => el.children[1]);
+    
+    selectItemsTextArray.forEach((elem) => {
+      if (!searchPhrase) {
+        clearInputInnerHtml(elem);
+        return;
+      };
+      clearInputInnerHtml(elem);
+      const { innerHTML } = elem;
+      const newInnerHtml = innerHTML.replaceAll(searchPhrase, `<b>${searchPhrase}</b>`);
+      elem.innerHTML = newInnerHtml;
+    });
+  })
 }
 
 const customSelectEventHandler = (customSelectDiv, selectItemsDiv, selectContainerDiv, optionsArrayData) => {
@@ -273,8 +307,10 @@ const customSelectEventHandler = (customSelectDiv, selectItemsDiv, selectContain
     expandHandler(e, optionsArrayData);
     backHandler(e, customSelectDiv);
     clearButtonHandler(e, { selectItemsDiv, optionsArrayData, selectContainerDiv });
-    submitButtonHandler(e, customSelectDiv, selectItemsDiv, selectContainerDiv);
-  })
+    submitButtonHandler(e, customSelectDiv, selectItemsDiv, selectContainerDiv, optionsArrayData);
+  });
+
+  searchInputEventHandler(customSelectDiv, selectItemsDiv);
 }
 
 const selectContainerEventHandler = (selectContainerDiv, customSelectDiv) => {
@@ -299,12 +335,9 @@ const customeSelect = () => {
   })
 }
 
-
 customeSelect();
 
-
-
-
+// helpers
 function create(el, classNames, child, parent, ...dataAttr) {
   let elem = null;
   try {
@@ -345,7 +378,7 @@ function create(el, classNames, child, parent, ...dataAttr) {
 
 function Event( event, params ) {
   params = params || { bubbles: false, cancelable: false, detail: undefined };
-  var evt = document.createEvent('CustomEvent');
+  const evt = document.createEvent('CustomEvent');
   evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
   return evt;
 }
