@@ -1,4 +1,4 @@
-import { create, Event, getAttribute, getSelectData, generateCustomSelect } from './js/helpers.js';
+import { create, Event, getAttribute, getSelectData, generateCustomSelect } from './helpers.js';
 
 const select = document.getElementsByTagName('select');
 [...select].forEach(elem => elem.addEventListener('change', (e) => {
@@ -64,6 +64,12 @@ const togglePartialCheckAllParents = (option) => {
     option.parent.isPartial = false;
   }
   togglePartialCheckAllParents(option.parent);
+}
+
+const togglePartialCheckAllParentsOnFirstLoad = (optionsArrayData) => {
+  optionsArrayData.filter((elem) => elem.checked).forEach((el) => {
+    togglePartialCheckAllParents(el);
+  });
 }
 
 const clearAllPartialCheck = (option) => {
@@ -169,7 +175,17 @@ const submitButtonHandler = (e, customSelectDiv, selectItemsDiv, selectContainer
   const submitButton = e.target.closest('.footer__button--primarily');
   if (!submitButton) return;
   const checkedRoot = selectItemsDiv.querySelectorAll('.select-item__container--checked');
-  if (!checkedRoot.length) return;
+  if (!checkedRoot.length) {
+    optionsArrayData.forEach((el) => {
+      el.option.removeAttribute('selected');
+      el.select.dispatchEvent(new Event('change'));
+    });
+    selectContainerDiv.children[1].innerHTML = 'Код ОКРБ или наименование закупаемой продукции';
+    customSelectDiv.classList.add('custom-select--hidden');
+    selectContainerDiv.children[1].classList.add('select-root--empty');
+    selectContainerDiv.children[0].children[1].classList.add('show-selected--hidden');
+    return;
+  };
   selectContainerDiv.children[1].innerHTML = checkedRoot[0]?.children[1]?.innerText;
   selectContainerDiv.children[1].classList.remove('select-root--empty');
   selectContainerDiv.children[0].children[1].classList.remove('show-selected--hidden');
@@ -239,6 +255,7 @@ const customeSelect = () => {
     const { optionsArrayData, selectData } = getSelectData(elem);
     const { selectItemsDiv, selectContainerDiv, customSelectDiv } = generateCustomSelect(optionsArrayData, selectData, wrapperDiv);
     toggleCheckboxAllChildrenOnFirstLoad(optionsArrayData);
+    togglePartialCheckAllParentsOnFirstLoad(optionsArrayData);
     customSelectEventHandler(customSelectDiv, selectItemsDiv, selectContainerDiv, optionsArrayData);
     selectContainerEventHandler(selectContainerDiv, customSelectDiv);
   })

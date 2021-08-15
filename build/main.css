@@ -1,3 +1,6 @@
+/*!*********************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/assets/sass/style.scss ***!
+  \*********************************************************************************************************************/
 * {
   box-sizing: border-box;
   margin: 0;
@@ -316,5 +319,3 @@
 .footer__button--secondary:hover {
   text-decoration: underline;
 }
-
-/*# sourceMappingURL=style.css.map */
