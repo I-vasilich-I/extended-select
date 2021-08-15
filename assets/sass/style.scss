@@ -189,7 +189,6 @@
   }
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
-
 }
 
 .select-items {
@@ -235,6 +234,8 @@
   &--hidden {
     display: none;
   }
+
+  
 
 }
 
@@ -301,6 +302,7 @@
   &--closed {
     transform: rotate(180deg);
   }
+
   
 }
 
