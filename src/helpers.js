@@ -130,7 +130,7 @@ const generateCustomSelect = (optionsArrayData, { selectName, selectedItems }, w
     'back',
     null,
     searchNavDiv,
-    ['src', '../assets/images/ic_backArrow.svg'],
+    ['src', './assets/images/ic_backArrow.svg'],
     ['alt', 'back']
   );
   const searchNavP = create('p', null, null, searchNavDiv);
@@ -169,7 +169,7 @@ const generateCustomSelect = (optionsArrayData, { selectName, selectedItems }, w
       null,
       null,
       selectItemCheckboxDiv,
-      ['src', '../assets/images/check.svg'],
+      ['src', './assets/images/check.svg'],
       ['alt', 'check']
     );
     const selectItemTextP = create('p', 'select-item__text', null, selectItemContainerDiv);
@@ -180,7 +180,7 @@ const generateCustomSelect = (optionsArrayData, { selectName, selectedItems }, w
         'arrow',
         null,
         selectItemTextP,
-        ['src', '../assets/images/Vector.svg'],
+        ['src', './assets/images/Vector.svg'],
         ['alt', 'arrow']
       );
     elem.itemContainer = selectItemContainerDiv;
