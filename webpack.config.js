@@ -49,5 +49,5 @@ module.exports = {
       filename: '[name].css',
     }),
   ],
-  output: { path: path.join(__dirname, 'build'), filename: '[name].js', publicPath: '/' },
+  output: { path: path.join(__dirname, 'build'), filename: '[name].js' },
 };

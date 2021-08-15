@@ -1,4 +1,4 @@
-import { create, Event, getAttribute, getSelectData, generateCustomSelect } from './helpers/helpers.js';
+import { create, Event, getAttribute, getSelectData, generateCustomSelect } from './helpers.js';
 
 const select = document.getElementsByTagName('select');
 [...select].forEach(elem => elem.addEventListener('change', (e) => {
