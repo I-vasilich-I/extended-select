@@ -1,5 +1,5 @@
 # Расширенный Select на VanillaJS
-### [Deploy](https://i-vasilich-i.github.io/ozitag-test/build/)
+### [Deploy](https://i-vasilich-i.github.io/extended-select/build/)
 Запуск
 
     	npm i
